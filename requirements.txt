@@ -1,0 +1,11 @@
+numpy
+scipy
+scikit-learn
+pandas
+pydantic
+seaborn
+tqdm
+matplotlib
+botorch==0.6.0
+ax-platform==0.2.3
+hummingbird-ml==0.4.3
