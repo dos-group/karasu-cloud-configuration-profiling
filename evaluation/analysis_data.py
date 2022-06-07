@@ -5,14 +5,24 @@ from typing import List
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import copy
 
 from classes.processed_workload import ProcessedWorkloadModel
+from preparation.loader_scout import load_scout
 
 warnings.filterwarnings("ignore", module="matplotlib\..*")
 
 root_dir = os.path.dirname(os.path.dirname(__file__))
-with open(os.path.join(root_dir, "data", "scout_multiple_raw.p"), "rb") as f:
-    workloads: List[ProcessedWorkloadModel] = pickle.load(f)
+
+workloads: List[ProcessedWorkloadModel]
+if os.path.exists(os.path.join(root_dir, "data", "scout_multiple_raw.p")):
+    with open(os.path.join(root_dir, "data", "scout_multiple_raw.p"), "rb") as f:
+        workloads = pickle.load(f)
+else:
+    workloads = load_scout("scout_multiple")
+    # save processed workloads for next analysis
+    with open(os.path.join(root_dir, "data", "scout_multiple_raw.p"), "wb") as f:
+        pickle.dump(workloads, f)
 
 rows = []
 for workload in workloads:
@@ -35,10 +45,24 @@ sns.set_style("ticks")
 
 
 def cost_energy_relplot(df, ax):
-    sns.scatterplot(data=df, x="cost", y="energy",
+    df_copy = copy.deepcopy(df)
+    df_copy['instance_type'] = pd.Categorical(df_copy['instance_type'], ["M", "C", "R"])
+    df_copy = df_copy.sort_values("instance_type")
+
+    sns.scatterplot(data=df_copy, x="cost", y="energy",
                     hue="instance_type",
                     marker="X",
                     ax=ax)
+
+    filtered_df = df_copy[df_copy["instance_type"] == "M"]
+    sns.regplot(data=filtered_df, x="cost", y="energy", marker="", ax=ax, color=sns.color_palette()[0],
+                line_kws={"linewidth": 0.5})
+    filtered_df = df_copy[df_copy["instance_type"] == "C"]
+    sns.regplot(data=filtered_df, x="cost", y="energy", marker="", ax=ax, color=sns.color_palette()[1],
+                line_kws={"linewidth": 0.5})
+    filtered_df = df_copy[df_copy["instance_type"] == "R"]
+    sns.regplot(data=filtered_df, x="cost", y="energy", marker="", ax=ax, color=sns.color_palette()[2],
+                line_kws={"linewidth": 0.5})
 
 
 f, ax = plt.subplots(nrows=1, ncols=1, figsize=(4, 2.5))

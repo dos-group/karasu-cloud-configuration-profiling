@@ -142,13 +142,15 @@ lim = (1, 2.5)
 
 ax1.set_ylim(lim)
 ax1.get_legend().remove()
-ax1.set_ylabel("Best cost (normalized)")
+ax1.set_ylabel("Difference to optimal cost")
+ax1.set_yticks([1, 1.25, 1.5, 1.75, 2, 2.25, 2.5])
+ax1.set_yticklabels(["0%", "25%", "50%", "75%", "100%", "125%", "150%"])
 ax1.set_xlabel("")
 ax1.set_title("NaiveBO (CherryPick)")
 
 ax2.set_ylim(lim)
 ax2.get_legend().remove()
-ax2.set_ylabel("Best cost (normalized)")
+ax2.set_ylabel("Difference to optimal cost")
 ax2.set_xlabel("Number of profiling runs")
 ax2.set_title("AugmentedBO (Arrow)")
 
@@ -196,7 +198,7 @@ ax3.set_xlabel("Best cost (normalized)")
 ax3.set_xlim((1, 1.82))
 
 ax4.set_ylabel("")
-ax4.set_xlabel("Percentage of profilings with timeout")  # timeout
+ax4.set_xlabel("Percentage of profiling runs with timeout")  # timeout
 ax4.set_xlim((0, 0.06))
 ax4.set_xticks([0, .01, .02, .03, .04, .05, .06])
 ax4.set_xticklabels(["0%", "1%", "2%", "3%", "4%", "5%", "6%"])
@@ -245,13 +247,15 @@ lim = (1, 2.5)
 
 ax1.set_ylim(lim)
 ax1.get_legend().remove()
-ax1.set_ylabel("Best cost (normalized)")
+ax1.set_ylabel("Difference to optimal cost")
+ax1.set_yticks([1, 1.25, 1.5, 1.75, 2, 2.25, 2.5])
+ax1.set_yticklabels(["0%", "25%", "50%", "75%", "100%", "125%", "150%"])
 ax1.set_xlabel("")
 ax1.set_title("NaiveBO (CherryPick)")
 
 ax2.set_ylim(lim)
 ax2.get_legend().remove()
-ax2.set_ylabel("Best cost (normalized)")
+ax2.set_ylabel("Difference to optimal cost")
 ax2.set_xlabel("Number of profiling runs")
 ax2.set_title("AugmentedBO (Arrow)")
 
@@ -300,7 +304,7 @@ ax3.set_xlabel("Best cost (normalized)")
 ax3.set_xlim((1, 1.82))
 
 ax4.set_ylabel("")
-ax4.set_xlabel("Percentage of profilings with timeout")
+ax4.set_xlabel("Percentage of profiling runs with timeout")
 ax4.set_xlim((0, 0.06))
 ax4.set_xticks([0, .01, .02, .03, .04, .05, .06])
 ax4.set_xticklabels(["0%", "1%", "2%", "3%", "4%", "5%", "6%"])
@@ -355,7 +359,7 @@ def rq3_soo_vs_moo(f, ax):
                 s='{:.0f}'.format(i),
                 color='black')
 
-    ax.text(x=0.455,
+    ax.text(x=0.45,
             y=38.2,
             s="1...10 profiling runs",
             color='black')
@@ -394,7 +398,7 @@ def rq3_baseline_vs_karasu(f, ax):
                 s='{:.0f}'.format(i),
                 color='black')
 
-    ax.text(x=1.57,
+    ax.text(x=1.56,
             y=1.08,
             s="1...10 profiling runs",
             color='black')
@@ -403,15 +407,19 @@ def rq3_baseline_vs_karasu(f, ax):
     ax.set_ylim(minmax)
     ax.set_xlim(minmax)
 
-    ax.set_xlabel("Best cost (normalized)")
-    ax.set_ylabel("Best energy (normalized)")
+    ax.set_xlabel("Difference to optimal cost")
+    ax.set_xticks([1, 1.25, 1.5, 1.75, 2, 2.25])
+    ax.set_xticklabels(["0%", "25%", "50%", "75%", "100%", "125%"])
+    ax.set_ylabel("Difference to optimal energy usage")
+    ax.set_yticks([1, 1.25, 1.5, 1.75, 2, 2.25])
+    ax.set_yticklabels(["0%", "25%", "50%", "75%", "100%", "125%"])
 
     handles, labels = ax.get_legend_handles_labels()
-    f.legend(handles, labels, loc='upper left', bbox_to_anchor=(0.57, 0.945), frameon=False)
+    f.legend(handles, labels, loc='upper left', bbox_to_anchor=(0.58, 0.945), frameon=False)
 
 
 f, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(5.8, 2.8))
-f.tight_layout(w_pad=2)
+f.tight_layout(w_pad=3)
 rq3_soo_vs_moo(f, ax1)
 rq3_baseline_vs_karasu(f, ax2)
 plt.savefig(os.path.join(root_dir, "artifacts", "rq3.pdf"), dpi=300, bbox_inches='tight')
