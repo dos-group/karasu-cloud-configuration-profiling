@@ -3,7 +3,7 @@
 Prototypical implementation of "Karasu" for collective and thus efficient cloud configuration profiling. 
 The whole approach is implemented in [Python](https://docs.python.org/3.8/).
 Please consider reaching out if you have questions or encounter problems.
-Artifact DOI: [https://doi.org/10.5281/zenodo.6624921](https://doi.org/10.5281/zenodo.6624921)
+Artifact DOI: [10.5281/zenodo.6624921](https://doi.org/10.5281/zenodo.6624921)
 
 ## Technical Details
 
