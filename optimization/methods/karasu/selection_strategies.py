@@ -63,6 +63,23 @@ class SelectionStrategy(AbstractSelectionStrategy):
         self.opt_class = opt_class
         return self
 
+    def set_hetero_lengths(self, seed_val: int):
+        np.random.seed(seed=seed_val)
+        for k, v in self.__info_dict__.items():
+            for kk, vv in v.items():
+                for idx, tup in enumerate(vv):
+                    t = tup[-1]
+                    indices = [i for i, w in enumerate(t.workloads) if not w.abandon]
+                    rand_num = np.random.choice(list(range(3, 11)))
+                    winner = max(indices[2] + 1, rand_num)
+                    new_t = WorkloadTask.create(t.workloads[:winner],
+                                                percentile=t.percentile,
+                                                runtime_target=t.runtime_target,
+                                                iteration=t.iteration)
+                    new_tup = (tup[0], tup[1], tup[2], new_t)
+                    self.__info_dict__[k][kk][idx] = new_tup
+        return self
+
     def set_rgpe_scope(self, rgpe_kwargs):
         self.rgpe_kwargs = copy.deepcopy(rgpe_kwargs)
         self.full_task = self.rgpe_kwargs.pop("full_task", None)

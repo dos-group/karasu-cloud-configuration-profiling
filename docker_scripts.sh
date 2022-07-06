@@ -39,6 +39,12 @@ run_rq2_experiment(){
   docker run -it --rm $VOLUME_MOUNTS -t $IMAGE_NAME $PYTHON_CMD
 }
 
+run_rq2_hetero_experiment(){
+  echo "### Run full RQ2 (heterogeneous data) experiments (this will take a long time)... ###"
+  PYTHON_CMD="python /home/karasu/app/evaluation/eval_soo_rq2_hetero.py"
+  docker run -it --rm $VOLUME_MOUNTS -t $IMAGE_NAME $PYTHON_CMD
+}
+
 run_rq3_experiment(){
   echo "### Run full RQ3 experiments (this will take a long time)... ###"
   PYTHON_CMD="python /home/karasu/app/evaluation/eval_moo_rq3.py"
