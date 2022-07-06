@@ -63,25 +63,34 @@ def load_and_prepare(path_to_file: str):
     return df
 
 
-cherrypick = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ0_cherrypick/multiple_soo_cherrypick.csv"))
-arrow = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ0_arrow/multiple_soo_arrow.csv"))
+cherrypick = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ0_cherrypick", "multiple_soo_cherrypick.csv"))
+arrow = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ0_arrow", "multiple_soo_arrow.csv"))
 
-rq1_cherrypick_k1 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ1_cherrypick/multiple_soo_rgpe_strategies_cherrypick_num_tasks=1.csv"))
-rq1_cherrypick_k5 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ1_cherrypick/multiple_soo_rgpe_strategies_cherrypick_num_tasks=5.csv"))
-rq1_cherrypick_k9 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ1_cherrypick/multiple_soo_rgpe_strategies_cherrypick_num_tasks=9.csv"))
-rq1_arrow_k1 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ1_arrow/multiple_soo_rgpe_strategies_arrow_num_tasks=1.csv"))
-rq1_arrow_k5 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ1_arrow/multiple_soo_rgpe_strategies_arrow_num_tasks=5.csv"))
-rq1_arrow_k9 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ1_arrow/multiple_soo_rgpe_strategies_arrow_num_tasks=9.csv"))
+rq1_cherrypick_k1 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ1_cherrypick",
+                                                  "multiple_soo_rgpe_strategies_cherrypick_num_tasks=1.csv"))
+rq1_cherrypick_k5 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ1_cherrypick",
+                                                  "multiple_soo_rgpe_strategies_cherrypick_num_tasks=5.csv"))
+rq1_cherrypick_k9 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ1_cherrypick",
+                                                  "multiple_soo_rgpe_strategies_cherrypick_num_tasks=9.csv"))
+rq1_arrow_k1 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ1_arrow",
+                                             "multiple_soo_rgpe_strategies_arrow_num_tasks=1.csv"))
+rq1_arrow_k5 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ1_arrow",
+                                             "multiple_soo_rgpe_strategies_arrow_num_tasks=5.csv"))
+rq1_arrow_k9 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ1_arrow",
+                                             "multiple_soo_rgpe_strategies_arrow_num_tasks=9.csv"))
 
-rq2_cherrypick_k1 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ2_cherrypick/multiple_soo_rgpe_strategies_cherrypick_num_tasks=1.csv"))
-rq2_cherrypick_k3 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ2_cherrypick/multiple_soo_rgpe_strategies_cherrypick_num_tasks=3.csv"))
-rq2_cherrypick_k5 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ2_cherrypick/multiple_soo_rgpe_strategies_cherrypick_num_tasks=5.csv"))
-rq2_arrow_k1 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ2_arrow/multiple_soo_rgpe_strategies_arrow_num_tasks=1.csv"))
-rq2_arrow_k3 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ2_arrow/multiple_soo_rgpe_strategies_arrow_num_tasks=3.csv"))
-rq2_arrow_k5 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ2_arrow/multiple_soo_rgpe_strategies_arrow_num_tasks=5.csv"))
+rq2_cherrypick_k3 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ2_cherrypick",
+                                                  "multiple_soo_rgpe_strategies_cherrypick_num_tasks=3.csv"))
+rq2_cherrypick_k3_hetero = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ2_hetero_cherrypick",
+                                                         "multiple_soo_rgpe_strategies_hetero_cherrypick_num_tasks=3.csv"))
+rq2_cherrypick_k3_hetero["identifier"] = rq2_cherrypick_k3_hetero["identifier"].apply(lambda x: f"{x}-Hetero")
+rq2_arrow_k3 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ2_arrow",
+                                             "multiple_soo_rgpe_strategies_arrow_num_tasks=3.csv"))
 
-rq3_moo_cherrypick = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ3_cherrypick/multiple_moo_cherrypick.csv"))
-rq3_moo_cherrypick_k3 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ3_cherrypick/multiple_moo_rgpe_strategies_cherrypick_num_tasks=3.csv"))
+rq3_moo_cherrypick = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ3_cherrypick",
+                                                   "multiple_moo_cherrypick.csv"))
+rq3_moo_cherrypick_k3 = load_and_prepare(os.path.join(root_dir, "artifacts", "RQ3_cherrypick",
+                                                      "multiple_moo_rgpe_strategies_cherrypick_num_tasks=3.csv"))
 
 
 def cost_and_time_at_stopping_condition(df, id_, n):
@@ -214,14 +223,11 @@ def extend_by_num_tasks(df, num_tasks):
 
 
 df = pd.concat((
-    pd.concat((extend_by_num_tasks(cherrypick, num_tasks) for num_tasks in [1, 3, 5]), axis=0, ignore_index=True),
-    pd.concat((extend_by_num_tasks(arrow, num_tasks) for num_tasks in [1, 3, 5]), axis=0, ignore_index=True),
-    rq2_cherrypick_k1,
+    pd.concat((extend_by_num_tasks(cherrypick, num_tasks) for num_tasks in [3]), axis=0, ignore_index=True),
+    pd.concat((extend_by_num_tasks(arrow, num_tasks) for num_tasks in [3]), axis=0, ignore_index=True),
     rq2_cherrypick_k3,
-    rq2_cherrypick_k5,
-    rq2_arrow_k1,
+    rq2_cherrypick_k3_hetero,
     rq2_arrow_k3,
-    rq2_arrow_k5,
 ), axis=0, ignore_index=True)
 
 df = df[(df["iteration"] == 1) | (df["iteration"] == 5) | (df["iteration"] == 9)]
@@ -231,12 +237,18 @@ df.loc[df.identifier == "KarasuOptimizerTASK", "identifier"] = "w/o Karasu"
 df.loc[df.identifier == "KarasuOptimizerRGPE-SimilarWorkloadSelectionStrategy1", "identifier"] = "Karasu (Policy A)"
 df.loc[df.identifier == "KarasuOptimizerRGPE-SimilarWorkloadSelectionStrategy2", "identifier"] = "Karasu (Policy B)"
 df.loc[df.identifier == "KarasuOptimizerRGPE-SimilarWorkloadSelectionStrategy3", "identifier"] = "Karasu (Policy C)"
-
+df.loc[
+    df.identifier == "KarasuOptimizerRGPE-SimilarWorkloadSelectionStrategy1-Hetero", "identifier"] = "Karasu (PoIicy A)"
+df.loc[
+    df.identifier == "KarasuOptimizerRGPE-SimilarWorkloadSelectionStrategy2-Hetero", "identifier"] = "Karasu (PoIicy B)"
+df.loc[
+    df.identifier == "KarasuOptimizerRGPE-SimilarWorkloadSelectionStrategy3-Hetero", "identifier"] = "Karasu (PoIicy C)"
 
 f, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharey=True, figsize=(5, 5))
 f.tight_layout(h_pad=2.5, w_pad=0)
 
-sns.boxplot(data=df[df["optimizer_strategy_sub"] == "NaiveBO"], x="profiling_counter", y="best_cost_found",
+sns.boxplot(data=df[(df["optimizer_strategy_sub"] == "NaiveBO") & (~df["identifier"].str.contains("PoIicy"))],
+            x="profiling_counter", y="best_cost_found",
             hue="identifier", ax=ax1,
             showfliers=False, palette=["#968D88", *sns.color_palette("crest")[:3]])
 sns.boxplot(data=df[df["optimizer_strategy_sub"] == "AugmentedBO"], x="profiling_counter", y="best_cost_found",
@@ -264,30 +276,54 @@ f.legend(handles, labels, loc='upper right', bbox_to_anchor=(0.96, 0.97), framea
 
 plt.savefig(os.path.join(root_dir, "artifacts", "rq2.pdf"), dpi=300, bbox_inches='tight')
 
-
 df2 = df[(df["optimizer_strategy_sub"] == "NaiveBO")]
 g = df2.groupby(by=["framework_name", "algorithm_name", "dataset_name", "percentile", "iteration", "identifier"])
 y = cost_and_time_df(g, "identifier")
 
-
-f, (ax1, ax2, ax3, ax4) = plt.subplots(nrows=4, ncols=1, sharey=True, figsize=(5, 5))
+f, (ax1, ax2, ax3, ax4) = plt.subplots(nrows=4, ncols=1, sharey=True, figsize=(5, 7))
 f.tight_layout(h_pad=2, w_pad=0)
 
-sns.boxplot(data=y, y="identifier", x="total_search_time", ax=ax1,
-            order=["w/o Karasu", "Karasu (Policy A)", "Karasu (Policy B)", "Karasu (Policy C)"],
-            showfliers=False, palette=["#968D88", *sns.color_palette("crest")[:3]])
 
-sns.boxplot(data=y, y="identifier", x="total_search_cost", ax=ax2,
-            order=["w/o Karasu", "Karasu (Policy A)", "Karasu (Policy B)", "Karasu (Policy C)"],
-            showfliers=False, palette=["#968D88", *sns.color_palette("crest")[:3]])
+def hatched_plot(elements):
+    # Loop over the elements
+    for i, element in enumerate(elements[1:]):
+        # Set a different hatch for each bar
+        if i % 2 == 1:
+            element.set_hatch("//")
+            element.set_alpha(.99)  # fix for pdf rendering (https://stackoverflow.com/a/59389823/2161490)
 
-sns.boxplot(data=y, y="identifier", x="best_cost_found", ax=ax3,
-            order=["w/o Karasu", "Karasu (Policy A)", "Karasu (Policy B)", "Karasu (Policy C)"],
-            showfliers=False, palette=["#968D88", *sns.color_palette("crest")[:3]])
 
-sns.barplot(data=y, y="identifier", x="timeout", ax=ax4,
-            order=["w/o Karasu", "Karasu (Policy A)", "Karasu (Policy B)", "Karasu (Policy C)"],
-            ci=None, palette=["#968D88", *sns.color_palette("crest")[:3]])
+ax1 = sns.boxplot(data=y, y="identifier", x="total_search_time", ax=ax1,
+                  order=["w/o Karasu",
+                         "Karasu (Policy A)", "Karasu (PoIicy A)",
+                         "Karasu (Policy B)", "Karasu (PoIicy B)",
+                         "Karasu (Policy C)", "Karasu (PoIicy C)"],
+                  showfliers=False, palette=["#968D88", *sum([[el, el] for el in sns.color_palette("crest")[:3]], [])])
+hatched_plot(ax1.patches)
+
+ax2 = sns.boxplot(data=y, y="identifier", x="total_search_cost", ax=ax2,
+                  order=["w/o Karasu",
+                         "Karasu (Policy A)", "Karasu (PoIicy A)",
+                         "Karasu (Policy B)", "Karasu (PoIicy B)",
+                         "Karasu (Policy C)", "Karasu (PoIicy C)"],
+                  showfliers=False, palette=["#968D88", *sum([[el, el] for el in sns.color_palette("crest")[:3]], [])])
+hatched_plot(ax2.patches)
+
+ax3 = sns.boxplot(data=y, y="identifier", x="best_cost_found", ax=ax3,
+                  order=["w/o Karasu",
+                         "Karasu (Policy A)", "Karasu (PoIicy A)",
+                         "Karasu (Policy B)", "Karasu (PoIicy B)",
+                         "Karasu (Policy C)", "Karasu (PoIicy C)"],
+                  showfliers=False, palette=["#968D88", *sum([[el, el] for el in sns.color_palette("crest")[:3]], [])])
+hatched_plot(ax3.patches)
+
+ax4 = sns.barplot(data=y, y="identifier", x="timeout", ax=ax4,
+                  order=["w/o Karasu",
+                         "Karasu (Policy A)", "Karasu (PoIicy A)",
+                         "Karasu (Policy B)", "Karasu (PoIicy B)",
+                         "Karasu (Policy C)", "Karasu (PoIicy C)"],
+                  ci=None, palette=["#968D88", *sum([[el, el] for el in sns.color_palette("crest")[:3]], [])])
+hatched_plot(ax4.patches)
 
 ax1.set_ylabel("")
 ax1.set_xlabel("Total search time (hours)")
@@ -316,7 +352,7 @@ def filter_rows(df, workload=None):
     if workload:
         framework_name, algorithm_name, dataset_name = workload
         df = df[(df["framework_name"] == framework_name) & (df["algorithm_name"] == algorithm_name) & (
-                    df["dataset_name"] == dataset_name)]
+                df["dataset_name"] == dataset_name)]
     df = df[(df["iteration"] == 1) | (df["iteration"] == 5) | (df["iteration"] == 9)]
     return df[["percentile", "iteration", "profiling_counter", "best_cost_found", "best_energy_found"]]
 
