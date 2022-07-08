@@ -55,6 +55,8 @@ analysis(){
   echo "### Create plots... ###"
   PYTHON_CMD="python /home/karasu/app/evaluation/analysis_data.py"
   docker run -it --rm $VOLUME_MOUNTS -t $IMAGE_NAME $PYTHON_CMD
+  PYTHON_CMD="python /home/karasu/app/evaluation/analysis_sim.py"
+  docker run -it --rm $VOLUME_MOUNTS -t $IMAGE_NAME $PYTHON_CMD
   PYTHON_CMD="python /home/karasu/app/evaluation/analysis_results.py"
   docker run -it --rm $VOLUME_MOUNTS -t $IMAGE_NAME $PYTHON_CMD
 }

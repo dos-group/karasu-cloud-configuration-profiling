@@ -90,6 +90,11 @@ To run the experiments and generate the data for analysis, run:
 ```
 In our experiments, the script ran for approx. 2 days.
 
+To evaluate the scenario of heterogeneous data that we discussed and reported in the paper, run:
+```
+./docker_scripts.sh run_rq2_hetero_experiment
+```
+
 ### RQ3: Multi-Objective Support
 
 To evaluate Karasu in an MOO setting, we consider two objectives, 

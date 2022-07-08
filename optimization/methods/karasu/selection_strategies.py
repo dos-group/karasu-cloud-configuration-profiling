@@ -89,7 +89,8 @@ class SelectionStrategy(AbstractSelectionStrategy):
 
     def get_prior_tasks(self, workloads: List[ProcessedWorkloadModel]) -> Tuple[List[CustomModelListGP], MinMaxScaler]:
         workload_task: WorkloadTask = WorkloadTask.create(workloads)
-        candidates: List[Tuple[float, WorkloadTask]] = self.__get_candidates__(workload_task)
+        candidates: List[Tuple[Optional[float], float, WorkloadTask]] = self.__get_candidates__(workload_task)
+        candidates = [c[1:] for c in candidates][:self.num_tasks]
 
         self.selected_tasks = copy.deepcopy([tup[1] for tup in candidates])
 
@@ -105,7 +106,7 @@ class SelectionStrategy(AbstractSelectionStrategy):
             result_list.append(optimizer.best_model)
         return result_list, root_scaler
 
-    def __get_candidates__(self, workload_task: WorkloadTask) -> List[Tuple[float, WorkloadTask]]:
+    def __get_candidates__(self, workload_task: WorkloadTask) -> List[Tuple[Optional[float], float, WorkloadTask]]:
         raise NotImplementedError
 
 
@@ -118,14 +119,14 @@ class AbstractSameWorkloadSelectionStrategy(SelectionStrategy):
     def validation_condition(self, cand: List[Tuple[int, int, float, WorkloadTask]]):
         raise NotImplementedError
 
-    def __get_candidates__(self, curr_task: WorkloadTask) -> List[Tuple[float, WorkloadTask]]:
+    def __get_candidates__(self, curr_task: WorkloadTask) -> List[Tuple[Optional[float], float, WorkloadTask]]:
         # rt_target, task
-        candidates: List[Tuple[float, WorkloadTask]] = []
+        candidates: List[Tuple[Optional[float], float, WorkloadTask]] = []
         for cand_tuple in self.info_dict.get(curr_task.identifier, []):
             if self.validation_condition(cand_tuple):
-                candidates.append(cand_tuple[2:])
+                candidates.append((None, *cand_tuple[2:]))
         shuffle(candidates)
-        return candidates[:self.num_tasks]
+        return candidates
 
 
 class ExactSameWorkloadSelectionStrategy(AbstractSameWorkloadSelectionStrategy):
@@ -157,9 +158,9 @@ class AbstractSimilarWorkloadSelectionStrategy(SelectionStrategy):
         arr_mod = np.minimum(np.maximum(arr, 0), 1)
         return arr_mod
     
-    def __get_candidates__(self, curr_task: WorkloadTask) -> List[Tuple[float, WorkloadTask]]:
+    def __get_candidates__(self, curr_task: WorkloadTask) -> List[Tuple[Optional[float], float, WorkloadTask]]:
         # similarity_score, rt_target, task
-        candidates: List[Tuple[float, float, WorkloadTask]] = []
+        candidates: List[Tuple[Optional[float], float, WorkloadTask]] = []
         for identifier, cand_tuple_list in self.info_dict.items():
             if self.validation_condition(curr_task, cand_tuple_list[0][-1]):
                 for cand_tuple in cand_tuple_list:
@@ -195,7 +196,7 @@ class AbstractSimilarWorkloadSelectionStrategy(SelectionStrategy):
                                        if len(temp_scores) else default_value, rt_target, cand_task))
 
         sorted_candidates = list(sorted(candidates, key=lambda cand: cand[0]))
-        return [c[1:] for c in sorted_candidates][:self.num_tasks]
+        return sorted_candidates
 
 
 class SimilarWorkloadSelectionStrategy1(AbstractSimilarWorkloadSelectionStrategy):
